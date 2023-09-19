@@ -1,7 +1,9 @@
 import './globals.css'
+import 'bootstrap/dist/css/bootstrap.css';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-
+import { Toaster } from "react-hot-toast";
+import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -16,7 +18,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" />
+      </head>
+      <body className={inter.className}>
+        <Toaster />
+        {children}
+        <Script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" />
+        <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" />
+      </body>
     </html>
   )
 }

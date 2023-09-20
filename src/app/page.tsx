@@ -14,9 +14,12 @@ export default function Home() {
   });
 
   const [user, setUser] = useState<any[]>();
+  const [company, setCompany] = useState<any[]>();
 
   const getUserData = async () => {
     await axios.get("http://localhost:3000/api/user").then((res) => {
+      console.log("res: ", res.data);
+      setCompany(res.data.companyresult);
       setUser(res.data.results);
     }).catch((error) => {
       console.log("error: ", error);
@@ -39,6 +42,14 @@ export default function Home() {
     }
   }
 
+  const handleClick = async () => {
+    await axios.get(`http://localhost:3000/api/test`).then((res) => {
+      toast.success("User Added Successfully");
+    }).catch((err) => {
+      console.log("err: ", err);
+    })
+  }
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -52,6 +63,8 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
+
+      <button onClick={handleClick}>Submit</button>
 
       <div className='m-auto d-flex justify-content-center' style={{ width: "100%", maxWidth: "500px" }}>
         <form onSubmit={handleSubmit}>
@@ -80,18 +93,28 @@ export default function Home() {
               <th scope="col">Username</th>
               <th scope="col">Email</th>
               <th scope="col">Password</th>
+              <th scope='col'>Company</th>
               <th scope='col'>Actions</th>
             </tr>
           </thead>
           <tbody>
             {
               user && user.map((data: any, index) => {
+
+                let userCompanyName = "";
+                company && company.map(res => {
+                  if (data.id === res.id) {
+                    userCompanyName = res.name
+                  }
+                })
+
                 return (
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>{data.name}</td>
                     <td>{data.email}</td>
                     <td>{data.password}</td>
+                    <td>{userCompanyName}</td>
                     <td><UpdateModal data={data} /></td>
                     <td><button className='btn btn-danger' onClick={() => handleDelete(data.id)}>Delete</button></td>
                   </tr>

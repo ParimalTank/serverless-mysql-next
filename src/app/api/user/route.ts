@@ -16,9 +16,15 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     try {
         const userData = await mysql.query("SELECT * FROM user");
+
+        const JoinData = await mysql.query("SELECT user.id ,company.name FROM user RIGHT JOIN company  ON user.id = company.user_id");
+        // const JoinData = await mysql.query("SELECT user.id , user.name , company.name , company.location FROM user CROSS JOIN company");
+
+        const RightJoinResult = JSON.parse(JSON.stringify(JoinData));
+
         const results = JSON.parse(JSON.stringify(userData));
 
-        return NextResponse.json({ results: results }, { status: 200 });
+        return NextResponse.json({ results: results, companyresult: RightJoinResult }, { status: 200 });
     } catch (error) {
         console.log("error: ", error);
         return NextResponse.json({ status: 500 });
